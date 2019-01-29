@@ -19,7 +19,7 @@
  17. [Simplify tests without implementation lock-in](#Simplify-tests-without-implementation-lock-in)
  18. [High-Level DOM Assertions for QUnit](#High-Level-DOM-Assertions-for-QUnit)
  19. [Type your code](#Type-your-code)
- 20. [Time traveling](#Time-traveling)
+ 20. [Time travelling](#Time-travelling)
  21. [Enforce locale](#Enforce-locale)
  22. [Accessibility / A11y](#Accessibility--A11y)
 
@@ -528,9 +528,9 @@ More info can be found in add-on repo: https://github.com/typed-ember/ember-cli-
 
 * * *
 
-# Time traveling
+# Time travelling
 
-From time to time, we need to ensure that our code will behave differently depending on actuall date context. With that said, for instance, our component presents date in the custom date format and we want to make sure it will work well in any given month - we need to let our test runner know that we are time travel to the given date. How to do it? We can use an proper add-on that wraps Timecop library:
+From time to time, we need to ensure that our code will behave differently depending on the actuall date context. With that said, for instance, our component presents date in the custom date format and we want to make sure it will work well in any given month - we need to let our test runner know that we are time travel to the given date. How to do it? We can use a proper add-on that wraps Timecop library:
 
 ```
 ember install ember-cli-timecop
