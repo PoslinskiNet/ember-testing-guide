@@ -111,7 +111,7 @@ $ ember generate service-test theme-switcher
 Sample service that switches theme could look like that:
 
 ```javascript
-// app/services/theme.js
+// app/services/theme-switcher.js
 import Service from '@ember/service';
 
 export default Service.extend({
@@ -130,11 +130,11 @@ A test for it
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 
-module('Unit | Service | some thing', function(hooks) {
+module('Unit | Service | Theme switcher', function(hooks) {
   setupTest(hooks);
 
   test('should switch dark mode on & off', function(assert) {
-    const themeManager = this.owner.lookup('service:theme');
+    const themeManager = this.owner.lookup('service:theme-switcher');
 
     // default
     assert.equal(themeManager.get('darkMode'), false);
