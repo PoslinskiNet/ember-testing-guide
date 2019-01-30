@@ -290,7 +290,7 @@ module('Acceptance | users', function(hooks) {
         .submit();
       
       assert.equal(currentURL(), '/users');
-      assert.equal(await usersPage.firstUser(), 'John Doe');
+      assert.equal(usersPage.firstUser(), 'John Doe');
     });
 });
 ```
@@ -306,6 +306,7 @@ We can stub methods, that are heavy, requires complex setup and usually are not 
 
 ```javascript
 import sinon from 'sinon';
+
 const store = this.owner.lookup('service:store');
 sinon.stub(store, 'getUsersTeams').returns(store.peekAll('user'));
 ```
@@ -317,7 +318,7 @@ https://sinonjs.org/releases/v7.1.0/stubs/
 * * *
 
 # Mocks
-Quite often in tests we need only simple objects rather than instances of full implementation of the given class. The good examples are quite often models where we are using mirage objects instead of Ember Data models, that differs with its inner implementation which speeds up tests.
+Quite often in tests we need only simple objects rather than instances of full implementation of the given class. The good example: models where we are using mirage objects instead of Ember Data models, that differs with its inner implementation (which speeds up tests).
 
 If we have a mirage in our application, we have a globally available server that can help us create new models for us.
 
@@ -362,11 +363,7 @@ https://sinonjs.org/releases/v7.1.0/spies/
 
 Let's imagine the scenario that we want to test the behaviour of our `users/` page that is accessible only for administrators. Our apps use `ember-simple-auth` for authentication as well as `ember-can` for authentication. We don't want to go through the whole login process in each acceptance test, because it slows down the test as well as it increases the risk of breaking many tests when the login page is broken only.
 
-<p align="right"><a href="#Table-of-Contents">back to top :arrow_up:</a></p>
-
-* * *
-
-## What we can do about it?
+### What we can do about it?
 
 Usually, our logic relies on the state of service objects. We need to make sure that we will stub a proper method or override a proper variable of the specific service object. How we can achieve that? We can use lookups. Lookup can find a reference of the specific factory for us, so in a test, we can do something like this:
 
@@ -375,7 +372,7 @@ this.owner.lookup('service:store') // returns store
 this.owner.lookup('component:my-component') // returns specific component
 ```
 
-Ok, but let's imagine the case we don't even have service in place in our application but it is still needed. We can register our own service easily. We can do the same for other types such as components, controllers, helpers etc. Ok, but how we can achieve this? By using `.register` method:
+Ok, what if we don't have service in place in our application but it is still needed. We can register our own service easily. We can do the same for other types such as components, controllers, helpers etc. How? By using `.register` method:
 
 ```javascript
 this.owner.register('service:my-service', EmberObject.create({})
@@ -388,13 +385,31 @@ this.owner.register('component:my-component' Component.create({}) // etc...
 
 # Make sure that all assertions passed
 
-QUnit allows us to make sure that all assertions passed:
+QUnit allows us to make sure that all assertions passed in the given test:
 
 ```javascript
 assert.expect(2);
 ```
 
-It is very useful for instance if we stub some method, where we put true assertion to make sure that we called that method on an object or we need to do some extra check inside the stubbed method on the object that it provides (for instance when we stub action that should receive some complex object). Sometimes we can use spy instead in such scenarios (for simpler objects).
+It is very useful for instance if we stub some method, where we put assertion in it, to make sure that we called that method on an object or we need to do some extra check inside the stubbed method on the object that it provides (for instance when we stub action that should receive some complex object). Sometimes we can use spy instead in such scenarios (for simpler objects).
+
+Example:
+
+```javascript
+module('when skiping', function() {
+  test('fires the on-skip action', async function(assert) {
+    assert.expect(1);
+
+    this.set('onSkip', (step) => {
+      assert.equal(step, this.steps[0])
+    });
+
+    await render(hbs`{{intro-js steps=steps start-if=true on-skip=(action onSkip)}}`);
+
+    await introJSSkip();
+  })
+});
+```
 
 <p align="right"><a href="#Table-of-Contents">back to top :arrow_up:</a></p>
 
