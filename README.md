@@ -12,16 +12,17 @@
  10. [Mocks](#Mocks)
  11. [Spies](#Spies)
  12. [Lookup & Register](#Lookup--Register)
- 13. [Make sure that all assertions passed](#Make-sure-that-all-assertions-passed)
- 14. [Test helpers](#Test-helpers)
- 15. [Don’t overuse beforeEach/afterEach hooks](#Don’t-overuse-beforeEach/afterEach-hooks)
- 16. [Blueprints](#Blueprints)
- 17. [Simplify tests without implementation lock-in](#Simplify-tests-without-implementation-lock-in)
- 18. [High-Level DOM Assertions for QUnit](#High-Level-DOM-Assertions-for-QUnit)
- 19. [Type your code](#Type-your-code)
- 20. [Time travelling](#Time-travelling)
- 21. [Enforce locale](#Enforce-locale)
- 22. [Accessibility / A11y](#Accessibility--A11y)
+ 13. [Debugging](#Debugging)
+ 14. [Make sure that all assertions passed](#Make-sure-that-all-assertions-passed)
+ 15. [Test helpers](#Test-helpers)
+ 16. [Don’t overuse beforeEach/afterEach hooks](#Don’t-overuse-beforeEach/afterEach-hooks)
+ 17. [Blueprints](#Blueprints)
+ 18. [Simplify tests without implementation lock-in](#Simplify-tests-without-implementation-lock-in)
+ 19. [High-Level DOM Assertions for QUnit](#High-Level-DOM-Assertions-for-QUnit)
+ 20. [Type your code](#Type-your-code)
+ 21. [Time travelling](#Time-travelling)
+ 22. [Enforce locale](#Enforce-locale)
+ 23. [Accessibility / A11y](#Accessibility--A11y)
 
 # Why I should test?
 In the beginning, it may sound like a waste of time for people who are not used to testing code, but in fact, it will pay off in the future when your code base grows. If your product will operate for months or even years, it means that you have to do manual testing of your app every time you introduce changes in the code. It is not a problem if you have dedicated resources for that purpose, but in the end, a lot of the work that is repeatable, instead of being automated, is handled over and over by someone introducing a possibility of making a mistake (we are just humans after all).
@@ -354,6 +355,20 @@ assert.equal(setValuesFunction.calledWith([1, 2, 3]), true);
 ```
 
 https://sinonjs.org/releases/v7.1.0/spies/ 
+
+<p align="right"><a href="#Table-of-Contents">back to top :arrow_up:</a></p>
+
+* * *
+
+# Debugging
+
+QUnit brings us a utility method that helps us examine and stop the execution of our spec:
+
+```javascript
+await this.pauseTest();
+```
+
+Whenever we will put it, we are able not just to see the intermediate state of the application inside the certain spec, but also we can just use a browser console to do some extra checks and experiments.
 
 <p align="right"><a href="#Table-of-Contents">back to top :arrow_up:</a></p>
 
