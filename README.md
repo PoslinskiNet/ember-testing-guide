@@ -23,6 +23,7 @@
  21. [Time travelling](#Time-travelling)
  22. [Enforce locale](#Enforce-locale)
  23. [Accessibility / A11y](#Accessibility--A11y)
+ 24. [Engines](#Engines)
 
 # Why I should test?
 In the beginning, it may sound like a waste of time for people who are not used to testing code, but in fact, it will pay off in the future when your code base grows. If your product will operate for months or even years, it means that you have to do manual testing of your app every time you introduce changes in the code. It is not a problem if you have dedicated resources for that purpose, but in the end, a lot of the work that is repeatable, instead of being automated, is handled over and over by someone introducing a possibility of making a mistake (we are just humans after all).
@@ -610,6 +611,32 @@ test('accessibility check of the our app root', async function (assert) {
 ```
 
 As a good starting point, I recommend starting from the following article by **Jen Weber**: https://www.emberjs.com/blog/2018/06/17/ember-accessibility-and-a11y-tools.html
+
+<p align="right"><a href="#Table-of-Contents">back to top :arrow_up:</a></p>
+
+* * *
+
+# Engines
+
+When you deal with `ember-engines` and you would like to test your engine code for instance: components, you need to make sure that in test environment your dummy application has access to the certain engine component. To make sure it does, you need to replace the default resolver, to proper engine resolver from an addon:
+
+```javascript
+import engineResolverFor from 'ember-engines/test-support/engine-resolver-for';
+```
+
+To use it, you pass it as a param to your **setup** call, for instance in case of unit tests you replace default:
+
+```javascript
+setupTest(hooks);
+```
+
+to:
+
+```javascript
+setupTest(hooks, { 
+  resolver: engineResolverFor('your-engine-name') 
+});
+```
 
 <p align="right"><a href="#Table-of-Contents">back to top :arrow_up:</a></p>
 
