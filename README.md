@@ -234,6 +234,8 @@ module('Acceptance | users', function(hooks) {
 
 More info: https://guides.emberjs.com/v2.14.0/testing/acceptance/
 
+More info about `test-helpers` you can find in [API reference](https://github.com/emberjs/ember-test-helpers/blob/master/API.md)
+
 <p align="right"><a href="#Table-of-Contents">back to top :arrow_up:</a></p>
 
 * * *
