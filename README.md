@@ -471,7 +471,7 @@ Some useful ones in terms of tests:
 ```
 $ ember generate component-test component-name
 $ ember generate route-test route-name
-$ ember generate unit-test unit-tested-thing-name
+$ ember generate util-test util-tested-thing-name
 $ ember generate acceptance-test acceptance-tested-thing-name
 $ ember generate service-test service-name
 $ ember generate helper-test helper-name
