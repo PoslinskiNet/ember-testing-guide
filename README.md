@@ -25,6 +25,7 @@
  23. [Enforce locale](#Enforce-locale)
  24. [Accessibility / A11y](#Accessibility--A11y)
  25. [Engines](#Engines)
+ 26. [Animations](#Animations)
 
 # Why I should test?
 In the beginning, it may sound like a waste of time for people who are not used to testing code, but in fact, it will pay off in the future when your code base grows. If your product will operate for months or even years, it means that you have to do manual testing of your app every time you introduce changes in the code. It is not a problem if you have dedicated resources for that purpose, but in the end, a lot of the work that is repeatable, instead of being automated, is handled over and over by someone introducing a possibility of making a mistake (we are just humans after all).
@@ -663,6 +664,20 @@ setupTest(hooks, {
   resolver: engineResolverFor('your-engine-name') 
 });
 ```
+
+<p align="right"><a href="#Table-of-Contents">back to top :arrow_up:</a></p>
+
+* * *
+
+# Animations
+
+When we need to make sure that our app finished all the animations we need to use the proper test helper. Don't worry, `ember-test-helpers` covers this case. To do so, just use
+
+```javascript
+await settled
+```
+
+We can even get more information about the state of our app when animations are present - more info can be found [here](https://github.com/emberjs/ember-test-helpers/blob/master/API.md#settled)
 
 <p align="right"><a href="#Table-of-Contents">back to top :arrow_up:</a></p>
 
