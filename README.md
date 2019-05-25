@@ -26,6 +26,7 @@
  24. [Accessibility / A11y](#Accessibility--A11y)
  25. [Engines](#Engines)
  26. [Animations](#Animations)
+ 27. [Visual test with Percy](#Visual-test-with-Percy)
 
 # Why I should test?
 In the beginning, it may sound like a waste of time for people who are not used to testing code, but in fact, it will pay off in the future when your code base grows. If your product will operate for months or even years, it means that you have to do manual testing of your app every time you introduce changes in the code. It is not a problem if you have dedicated resources for that purpose, but in the end, a lot of the work that is repeatable, instead of being automated, is handled over and over by someone introducing a possibility of making a mistake (we are just humans after all).
@@ -678,6 +679,20 @@ await settled
 ```
 
 We can even get more information about the state of our app when animations are present - more info can be found [here](https://github.com/emberjs/ember-test-helpers/blob/master/API.md#settled)
+
+<p align="right"><a href="#Table-of-Contents">back to top :arrow_up:</a></p>
+
+* * *
+
+# Visual test with Percy
+
+Guess what - Ember got you covered again and thanks to Percy with the [proper add-on](https://github.com/percy/ember-percy), visual regression testing is extremely easy to integrate with our acceptance tests. All you need to do to create and compare snapshot in terms of your acceptance test is to add within the specific test the following code:
+
+```javascript
+percySnapshot('homepage');
+```
+
+Of course, it also requires some additional setup related to the Percy service itself. To find out more, check out the [Percy page](https://docs.percy.io/docs/ember).
 
 <p align="right"><a href="#Table-of-Contents">back to top :arrow_up:</a></p>
 
