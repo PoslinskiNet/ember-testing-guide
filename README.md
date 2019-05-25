@@ -39,7 +39,30 @@ Now imagine that our team grows. A new team member who is not aware of every dec
 2. Follow SOLID principles in your implementation (https://en.wikipedia.org/wiki/Single_responsibility_principle). One of the benefits: if we change the implementation of a small chunk of code, only the tests that are related to this code can break - and we can easily fix all the problems instead of looking at huge parts of a code that can interact with our changes. It also reduces the changes in the code base - which simplifies tracking those changes for your teammates as well as the merging process in general.
 3. Keep the setup as tiny and as explicit per each test as possible - avoid global before/after setup if it is not shared across all tests in the given file with tests. It also speeds up the process of writing tests, because you don’t have to worry about the “global” setup of your suite, instead of that you only focus on the “local” setup. It usually means that you also utilize your testing environment because you are not wasting resources when you don’t have to (for instance, global setup always sets a variable that is used in the scope of few tests instead of all tests).
 4. Make sure you have tested all cases without false-positive effect (broken implementation can’t pass the tests - with false-positive it can).
-5. Avoid using non-explicit dependencies, for instance - not publicly visible/defined dependencies of your code. Good example: our component shouldn’t rely on service objects that are globally injected in the application - they should be self-contained and independent, so we will avoid difficult debugging process and never forget about the proper setup of the application.
+5. Avoid using non-explicit dependencies, for instance - not publicly visible/defined dependencies of your code. Good example: our component shouldn’t rely on service objects that are globally injected in the application - they should be self-contained and independent, so we will avoid difficult debugging process and never forget about the proper setup of the application. Avoid coupling is the way to go, but sometimes you need to rely on other things - if you do so, try to be as transparent for other developers as possible.
+
+<p align="right"><a href="#Table-of-Contents">back to top :arrow_up:</a></p>
+
+* * *
+
+# Types of tests
+
+In general, in terms of frontend development tests can be split into the following categories:
+
+- **Manual tests** - which relies on critical scenarios so-called acceptance criteria and are requires human effort to check the given solution works as expected.
+- **Acceptance tests** - automatic tests that check the whole application behaviour - similar to manual tests, however, they are usually more expensive at the beginning to introduce to the project.
+- **Integration tests** - lighter than acceptance tests - usually tests integration between multiple parts of the application, for instance, interaction with the component that has some extra dependency involved. In terms of integration test, we are focusing on the behaviour of the given component - without knowing how it is implemented underneath.
+- **Unit tests** - this type of automated tests are the fastest and are coupled with the implementation. With that said, if we are changing our implementation, for instance, our code has changed the inner or outer interface - the corresponding test should fail.
+
+It is worth noting that there are subcategories available within the groups above, for instance:
+
+- **Visual tests** - which can be automated and detects breaking changes in terms of the visual aspect of our application. Usually works on comparison of expected design of the application - based on the screenshot, which is compared to the current state of the application after changes were introduced.
+
+There is a pretty good classification chart that describes the relationship between the cost of each type of test in correlation to business value:
+
+![Tests](http://1.bp.blogspot.com/-RQLtpTssY_o/UZ9CYqzflqI/AAAAAAAAAyo/9kIx6aGwSaU/s320/TestingTrianglePished.png)
+
+Find out more about testing clasification and Testing Pyramid: https://dzone.com/articles/testing-triangle-circle-and
 
 <p align="right"><a href="#Table-of-Contents">back to top :arrow_up:</a></p>
 
