@@ -63,7 +63,7 @@ It is worth noting that there are subcategories available within the groups abov
 
 There is a pretty good classification chart that describes the relationship between the cost of each type of test in correlation to business value:
 
-<p align="center">![Tests](http://1.bp.blogspot.com/-RQLtpTssY_o/UZ9CYqzflqI/AAAAAAAAAyo/9kIx6aGwSaU/s320/TestingTrianglePished.png)</p>
+<p align="center"><img src="http://1.bp.blogspot.com/-RQLtpTssY_o/UZ9CYqzflqI/AAAAAAAAAyo/9kIx6aGwSaU/s320/TestingTrianglePished.png"></p>
 
 Find out more about testing clasification and Testing Pyramid: https://dzone.com/articles/testing-triangle-circle-and
 
