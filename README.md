@@ -2,28 +2,29 @@
 
  1. [Why I should test?](#Why-I-should-test?)
  2. [Testing good practices](#Testing-good-practices)
- 3. [How to run tests](#How-to-run-tests)
- 4. [Fake backend](#Fake-backend)
- 5. [Unit tests](#unit-tests)
- 6. [Integration tests](#Integration-tests)
- 7. [Acceptance tests](#Acceptance-tests)
- 8. [Page objects](#Page-objects)
- 9. [Stubs](#Stubs)
- 10. [Mocks](#Mocks)
- 11. [Spies](#Spies)
- 12. [Lookup & Register](#Lookup--Register)
- 13. [Debugging](#Debugging)
- 14. [Make sure that all assertions passed](#Make-sure-that-all-assertions-passed)
- 15. [Test helpers](#Test-helpers)
- 16. [Don’t overuse beforeEach/afterEach hooks](#Don’t-overuse-beforeEach/afterEach-hooks)
- 17. [Blueprints](#Blueprints)
- 18. [Simplify tests without implementation lock-in](#Simplify-tests-without-implementation-lock-in)
- 19. [High-Level DOM Assertions for QUnit](#High-Level-DOM-Assertions-for-QUnit)
- 20. [Type your code](#Type-your-code)
- 21. [Time travelling](#Time-travelling)
- 22. [Enforce locale](#Enforce-locale)
- 23. [Accessibility / A11y](#Accessibility--A11y)
- 24. [Engines](#Engines)
+ 3. [Classification of tests](#Classification-of-tests)
+ 4. [How to run tests](#How-to-run-tests)
+ 5. [Fake backend](#Fake-backend)
+ 6. [Unit tests](#unit-tests)
+ 7. [Integration tests](#Integration-tests)
+ 8. [Acceptance tests](#Acceptance-tests)
+ 9. [Page objects](#Page-objects)
+ 10. [Stubs](#Stubs)
+ 11. [Mocks](#Mocks)
+ 12. [Spies](#Spies)
+ 13. [Lookup & Register](#Lookup--Register)
+ 14. [Debugging](#Debugging)
+ 15. [Make sure that all assertions passed](#Make-sure-that-all-assertions-passed)
+ 16. [Test helpers](#Test-helpers)
+ 17. [Don’t overuse beforeEach/afterEach hooks](#Don’t-overuse-beforeEach/afterEach-hooks)
+ 18. [Blueprints](#Blueprints)
+ 19. [Simplify tests without implementation lock-in](#Simplify-tests-without-implementation-lock-in)
+ 20. [High-Level DOM Assertions for QUnit](#High-Level-DOM-Assertions-for-QUnit)
+ 21. [Type your code](#Type-your-code)
+ 22. [Time travelling](#Time-travelling)
+ 23. [Enforce locale](#Enforce-locale)
+ 24. [Accessibility / A11y](#Accessibility--A11y)
+ 25. [Engines](#Engines)
 
 # Why I should test?
 In the beginning, it may sound like a waste of time for people who are not used to testing code, but in fact, it will pay off in the future when your code base grows. If your product will operate for months or even years, it means that you have to do manual testing of your app every time you introduce changes in the code. It is not a problem if you have dedicated resources for that purpose, but in the end, a lot of the work that is repeatable, instead of being automated, is handled over and over by someone introducing a possibility of making a mistake (we are just humans after all).
@@ -45,7 +46,7 @@ Now imagine that our team grows. A new team member who is not aware of every dec
 
 * * *
 
-# Types of tests
+# Classification of tests
 
 In general, in terms of frontend development tests can be split into the following categories:
 
@@ -60,7 +61,7 @@ It is worth noting that there are subcategories available within the groups abov
 
 There is a pretty good classification chart that describes the relationship between the cost of each type of test in correlation to business value:
 
-![Tests](http://1.bp.blogspot.com/-RQLtpTssY_o/UZ9CYqzflqI/AAAAAAAAAyo/9kIx6aGwSaU/s320/TestingTrianglePished.png)
+<p align="center">![Tests](http://1.bp.blogspot.com/-RQLtpTssY_o/UZ9CYqzflqI/AAAAAAAAAyo/9kIx6aGwSaU/s320/TestingTrianglePished.png)</p>
 
 Find out more about testing clasification and Testing Pyramid: https://dzone.com/articles/testing-triangle-circle-and
 
