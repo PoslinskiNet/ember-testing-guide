@@ -675,7 +675,7 @@ setupTest(hooks, {
 When we need to make sure that our app finished all the animations we need to use the proper test helper. Don't worry, `ember-test-helpers` covers this case. To do so, just use
 
 ```javascript
-await settled
+await settled()
 ```
 
 We can even get more information about the state of our app when animations are present - more info can be found [here](https://github.com/emberjs/ember-test-helpers/blob/master/API.md#settled)
