@@ -20,13 +20,14 @@
  18. [Blueprints](#Blueprints)
  19. [Simplify tests without implementation lock-in](#Simplify-tests-without-implementation-lock-in)
  20. [High-Level DOM Assertions for QUnit](#High-Level-DOM-Assertions-for-QUnit)
- 21. [Type your code](#Type-your-code)
- 22. [Time travelling](#Time-travelling)
- 23. [Enforce locale](#Enforce-locale)
- 24. [Accessibility / A11y](#Accessibility--A11y)
- 25. [Engines](#Engines)
- 26. [Animations](#Animations)
- 27. [Visual test with Percy](#Visual-test-with-Percy)
+ 21. [Check the flow](#Check-the-flow)
+ 22. [Type your code](#Type-your-code)
+ 23. [Time travelling](#Time-travelling)
+ 24. [Enforce locale](#Enforce-locale)
+ 25. [Accessibility / A11y](#Accessibility--A11y)
+ 26. [Engines](#Engines)
+ 27. [Animations](#Animations)
+ 28. [Visual test with Percy](#Visual-test-with-Percy)
 
 # Why I should test?
 In the beginning, it may sound like a waste of time for people who are not used to testing code, but in fact, it will pay off in the future when your code base grows. If your product will operate for months or even years, it means that you have to do manual testing of your app every time you introduce changes in the code. It is not a problem if you have dedicated resources for that purpose, but in the end, a lot of the work that is repeatable, instead of being automated, is handled over and over by someone introducing a possibility of making a mistake (we are just humans after all).
@@ -569,6 +570,38 @@ assert.dom('#title').hasText('My header');
 Full documentation can be found here: https://github.com/simplabs/qunit-dom
 
 The especially useful part for us: https://github.com/simplabs/qunit-dom/blob/master/API.md
+
+<p align="right"><a href="#Table-of-Contents">back to top :arrow_up:</a></p>
+
+* * *
+
+# Check the flow
+
+Sometimes you need to verify the sequence of calls in your code. There is a very handy tool available that could handle this check for you and its called **steps**.
+
+Let's take a look at the example:
+
+```javascript
+const displayResults = () => assert.step(['displayResults']);
+const validateForm = () => assert.step(['validateForm']);
+const prepareData = () => assert.step(['prepareData']);
+
+const submitForm = () => {
+  prepareData();
+  validateForm();
+  displayResults();
+}
+
+submitForm();
+
+assert.verifySteps([
+  'prepareData', 
+  'validateForm', 
+  'displayResults'
+]);
+```
+
+You can also imagine async use cases that could benefit from **steps**.
 
 <p align="right"><a href="#Table-of-Contents">back to top :arrow_up:</a></p>
 
