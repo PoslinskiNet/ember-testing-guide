@@ -81,10 +81,10 @@ A few useful commands that you should know:
 $ ember test
 
 // run the suite in the terminal in watch mode - you can also inspect the app in that mode
-$ ember test -s 
+$ ember test -s
 
 // filter the test suite and running only the tests that matches the filter
-$ ember test -f 'some string' 
+$ ember test -f 'some string'
 ```
 
 Also, by default, test runner is available in /tests tab of your app: http://localhost:4200/tests
@@ -167,10 +167,10 @@ module('Unit | Service | Theme switcher', function(hooks) {
 
     // default
     assert.equal(themeManager.get('darkMode'), false);
-    
+
     themeManager.toggleDarkMode(); // first run
     assert.equal(themeManager.get('darkMode'), true);
-    
+
     themeManager.toggleDarkMode(); // second run
     assert.equal(themeManager.get('darkMode'), false);
   });
@@ -252,14 +252,14 @@ module('Acceptance | users', function(hooks) {
     await visit('/users/new');
     await fillIn('input.name', 'John Doe');
     await click('button.submit');
-    
+
     assert.dom('ul.users li').hasText('John Doe');
     assert.equal(currentURL(), '/users');
   });
 });
 ```
 
-More info: https://guides.emberjs.com/v2.14.0/testing/acceptance/
+More info: https://guides.emberjs.com/release/testing/acceptance/
 
 More info about `test-helpers` you can find in [API reference](https://github.com/emberjs/ember-test-helpers/blob/master/API.md)
 
@@ -287,7 +287,7 @@ export default create({
   visit: visitable('/users/new'),
 
   username: fillable('input.name'),
-  
+
   submit: clickable('button.submit'),
   error: text('.errors')
 });
@@ -319,7 +319,7 @@ module('Acceptance | users', function(hooks) {
         .visit()
         .username('John Doe')
         .submit();
-      
+
       assert.equal(currentURL(), '/users');
       assert.equal(usersPage.firstUser(), 'John Doe');
     });
@@ -342,7 +342,7 @@ const store = this.owner.lookup('service:store');
 sinon.stub(store, 'getUsersTeams').returns(store.peekAll('user'));
 ```
 
-https://sinonjs.org/releases/v7.1.0/stubs/ 
+https://sinonjs.org/releases/latest/stubs/
 
 <p align="right"><a href="#Table-of-Contents">back to top :arrow_up:</a></p>
 
@@ -364,7 +364,7 @@ const mockedUser = server.create('user', user);
 
 You can even mock complete objects with Sinon (without Mirage) or use plain JS objects:
 
-https://sinonjs.org/releases/v7.1.0/mocks/ 
+https://sinonjs.org/releases/latest/mocks/
 
 <p align="right"><a href="#Table-of-Contents">back to top :arrow_up:</a></p>
 
@@ -384,7 +384,7 @@ await doSomething();
 assert.equal(setValuesFunction.calledWith([1, 2, 3]), true);
 ```
 
-https://sinonjs.org/releases/v7.1.0/spies/ 
+https://sinonjs.org/releases/latest/spies/
 
 <p align="right"><a href="#Table-of-Contents">back to top :arrow_up:</a></p>
 
@@ -595,8 +595,8 @@ const submitForm = () => {
 submitForm();
 
 assert.verifySteps([
-  'prepareData', 
-  'validateForm', 
+  'prepareData',
+  'validateForm',
   'displayResults'
 ]);
 ```
@@ -694,8 +694,8 @@ setupTest(hooks);
 to:
 
 ```javascript
-setupTest(hooks, { 
-  resolver: engineResolverFor('your-engine-name') 
+setupTest(hooks, {
+  resolver: engineResolverFor('your-engine-name')
 });
 ```
 
