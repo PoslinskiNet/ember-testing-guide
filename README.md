@@ -143,13 +143,13 @@ Sample service that switches theme could look like that:
 // app/services/theme-switcher.js
 import Service from '@ember/service';
 
-export default Service.extend({
-  darkMode: false,
+export default class ThemeSwitcherService extends Service {
+  darkMode: false;
 
   toggleDarkMode() {
     this.toggleProperty('darkMode')
   }
-});
+};
 ```
 
 A test for it
@@ -194,7 +194,7 @@ A sample component that prints info about our user & test for it can look as fol
 
 ```handlebars
 <!-- app/components/user-details/template.hbs -->
-{{user.name}} | Tasks: {{user.tasks.length}} | Comments: {{user.comments.length}}
+{{@user.name}} | Tasks: {{@user.tasks.length}} | Comments: {{@user.comments.length}}
 ```
 
 ```javascript
@@ -216,7 +216,7 @@ module('Integration | Component | user details', function(hooks) {
         comments: { length: 3 }
     });
 
-    await render(hbs`{{user-details user=user}}`);
+    await render(hbs`<UserDetails @user=user/>`);
 
     assert.dom(this.element).hasText('John Doe | Tasks: 5 | Comments: 3');
   });
@@ -450,7 +450,7 @@ module('when skiping', function() {
       assert.equal(step, this.steps[0])
     });
 
-    await render(hbs`{{intro-js steps=steps start-if=true on-skip=(action onSkip)}}`);
+    await render(hbs`<IntroJs @steps=steps @startIf=true onSkip=(action onSkip)/>`);
 
     await introJSSkip();
   })
@@ -522,8 +522,8 @@ In your templates you are now able to use `data-test-*` attributes, which are au
 
 ```handlebars
 <article>
-  <h1 data-test-post-title data-test-resource-id="{{post.id}}">{{post.title}}</h1>
-  <p>{{post.body}}</p>
+  <h1 data-test-post-title data-test-resource-id="{{@post.id}}">{{@post.title}}</h1>
+  <p>{{@post.body}}</p>
 </article>
 ```
 
