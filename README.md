@@ -142,12 +142,13 @@ Sample service that switches theme could look like that:
 ```javascript
 // app/services/theme-switcher.js
 import Service from '@ember/service';
+import { tracked } from '@glimmer/tracking';
 
 export default class ThemeSwitcherService extends Service {
-  darkMode: false;
+  @tracked darkMode = false;
 
   toggleDarkMode() {
-    this.toggleProperty('darkMode')
+    this.darkMode = !this.darkMode;
   }
 };
 ```
@@ -216,7 +217,7 @@ module('Integration | Component | user details', function(hooks) {
         comments: { length: 3 }
     });
 
-    await render(hbs`<UserDetails @user=user/>`);
+    await render(hbs`<UserDetails @user={{this.user}}/>`);
 
     assert.dom(this.element).hasText('John Doe | Tasks: 5 | Comments: 3');
   });
@@ -450,7 +451,7 @@ module('when skiping', function() {
       assert.equal(step, this.steps[0])
     });
 
-    await render(hbs`<IntroJs @steps=steps @startIf=true onSkip=(action onSkip)/>`);
+    await render(hbs`<IntroJs @steps={{this.steps}} @startIf=true onSkip={{action this.onSkip}}/>`);
 
     await introJSSkip();
   })
