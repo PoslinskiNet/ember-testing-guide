@@ -1,6 +1,6 @@
 ## Table of Contents
 
- 1. [Why I should test?](#Why-I-should-test?)
+ 1. [Why I should test?](#Why-I-should-test)
  2. [Testing good practices](#Testing-good-practices)
  3. [Classification of tests](#Classification-of-tests)
  4. [How to run tests](#How-to-run-tests)
