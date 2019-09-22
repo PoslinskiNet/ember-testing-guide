@@ -87,14 +87,18 @@ $ ember test -s
 $ ember test -f 'some string'
 ```
 
-Also, by default, test runner is available in /tests tab of your app: http://localhost:4200/tests
+Also, by default, test runner is available in `/tests` tab of your app: http://localhost:4200/tests
 
 <p align="right"><a href="#Table-of-Contents">back to top :arrow_up:</a></p>
 
 * * *
 
 # Fake backend
-Let's write a simple backend for our app so we can test it easily and we don't have to wait for the real backend to be up and running. Let's add a proper add-on:
+Let's write a simple backend for our app so we can test it easily and we don't have to wait for the real backend to be up and running and we decouple our client app test suite from another application. The other upside of such approach is that we document how the backend should work like and we can send such definition to backend devs so they can align with us with already working code.
+
+When API devs implement complete solution based on our fake backend, everything should work the same, so our app can just us the API in the production without further adjustments.
+
+Let's add a proper add-on:
 
 ```
 $ ember install ember-cli-mirage
@@ -124,6 +128,21 @@ Make sure that your application adapter has the proper namespace property set:
 namespace: 'api'
 ```
 
+If we want to use Mirage in our test, we need to set it up in each test for instance in case of integration tests it can look like that:
+
+```javascript
+import { module } from 'qunit';
+import { setupRenderingTest } from 'ember-qunit';
+import { setupMirage } from 'ember-cli-mirage/test-support';
+
+module('Integration | Component | FindRecord', function(hooks) {
+  setupRenderingTest(hooks);
+  setupMirage(hooks);
+  ....
+```
+
+Mirage itself contains another cool features, such as delaying responses, dynamic paths, customized responses, scenarios, factories and many more.
+
 More about mirage: https://www.ember-cli-mirage.com
 
 <p align="right"><a href="#Table-of-Contents">back to top :arrow_up:</a></p>
@@ -131,6 +150,8 @@ More about mirage: https://www.ember-cli-mirage.com
 * * *
 
 # Unit tests
+This type of tests is highly bounded with our implementation, especially in terms of public contract of our classes/functions etc. With that said, by changing interface of our unit tested implementation, usually it should cause test fail.
+
 Let's generate a service test for our theme manager service:
 
 ```
@@ -178,6 +199,8 @@ module('Unit | Service | Theme switcher', function(hooks) {
 });
 ```
 
+By accessing public interface, we just checking that it's inner implementation interact with public property that can be used within the application.
+
 More info: https://guides.emberjs.com/release/testing/unit-testing-basics/
 
 <p align="right"><a href="#Table-of-Contents">back to top :arrow_up:</a></p>
@@ -185,7 +208,9 @@ More info: https://guides.emberjs.com/release/testing/unit-testing-basics/
 * * *
 
 # Integration tests
-Let's generate a component test for our user-details component:
+We can imagine integration test as something between unit and acceptance tests. In the one side, we need to follow the interface (of component in the given case), on the other hand, we focus on behaviour of the component after rendering or even better interacting with it.
+
+Let's generate a component test for our **user-details** component:
 
 ```
 $ ember generate component-test user-details
@@ -231,7 +256,9 @@ More info: https://guides.emberjs.com/release/testing/testing-components/
 * * *
 
 # Acceptance tests
-Let's prepare an automatic test for the creation of a new user. After user creation, app redirects to the listing on `/users` route.
+This type of test shouldn't know anything implementation details of our application. Typical acceptance test should focus flow testing - happy paths testing or in smaller scope for instance checking multiple components integrated together on specific a page.
+
+Typical scenario that most apps needs to handle one way or another - creation of a new user. After user creation, app redirects to the listing on `/users` route.
 
 We can use a blueprint to create a new acceptance test:
 
@@ -260,9 +287,11 @@ module('Acceptance | users', function(hooks) {
 });
 ```
 
-More info: https://guides.emberjs.com/release/testing/acceptance/
+What you can notice in the following example, there is a lot of implementation details involved, such as specific querySelectors (`input.name` & `button.submit`) - we will abstract such implementation details in the next section with **page-objects**, so our test can be even more descriptive.
 
 More info about `test-helpers` you can find in [API reference](https://github.com/emberjs/ember-test-helpers/blob/master/API.md)
+
+More info: https://guides.emberjs.com/release/testing/acceptance/
 
 <p align="right"><a href="#Table-of-Contents">back to top :arrow_up:</a></p>
 
@@ -270,7 +299,7 @@ More info about `test-helpers` you can find in [API reference](https://github.co
 
 # Page objects
 
-Page objects offer an extra layer for our acceptance tests that simplifies them, improves readability and allows to write tests quicker. Page objects hide the implementation details behind the interface of class so-called page-object.
+Page objects offer an extra layer for our acceptance tests that simplifies them, improves readability and allows to write tests quicker. Page objects hide the implementation details behind the interface of class so-called **page-object**.
 
 Let's install the proper addon:
 
@@ -294,16 +323,20 @@ export default create({
 });
 ```
 
+We can also provide some extra page object for easy access to `/users` page details.
+
 ```javascript
 // tests/page-objects/users.js
 import { create, visitable, fillable, clickable, text } from 'ember-cli-page-object';
 
 export default create({
-  visit: visitable('/users'),
+  path: '/users',
 
   firstUser: text('ul.users:first-child')
 });
 ```
+
+Now let's use it into our acceptance test:
 
 ```javascript
 // tests/acceptance/users-test.js
@@ -321,11 +354,13 @@ module('Acceptance | users', function(hooks) {
         .username('John Doe')
         .submit();
 
-      assert.equal(currentURL(), '/users');
+      assert.equal(currentURL(), usersPage.path);
       assert.equal(usersPage.firstUser(), 'John Doe');
     });
 });
 ```
+
+It's much cleaner, isn't it?
 
 More info: http://ember-cli-page-object.js.org
 
@@ -334,14 +369,22 @@ More info: http://ember-cli-page-object.js.org
 * * *
 
 # Stubs
-We can stub methods that are heavy, require complex setup and usually are not the clue of our tests, but can improve their readability a lot.
+We can stub methods that are heavy, require complex setup and usually are not the clue of our tests. With stubs, we also improving their readability.
+
+Let's imagine the scenario, that we have a service, that has a complex method `usersTeams` that is used by our component. It's not only complex, but it has multiple dependencies, so the setup would be quite complex and would bloat our test suite, but its not the clue of our component test and should be covered separatelly in the proper unit test of the service. 
+
+We assume that it works fine, because it is unit tested, so let's stub it (mimic it's behaviour by overriding it with simple result behaviour).
+
+One of the options that we have is use just power of JavaScript or use dedicated libs that can provide handy interface for stubs, such as for example **Sinon**.
 
 ```javascript
 import sinon from 'sinon';
 
 const store = this.owner.lookup('service:store');
-sinon.stub(store, 'getUsersTeams').returns(store.peekAll('user'));
+sinon.stub(store, 'usersTeams').returns(store.peekAll('user'));
 ```
+
+Now we are sure that once our component, calls store service in it's code and hits the **usersTeams** method, without further due it will return user records (if any are provided for example via Mirage). 
 
 https://sinonjs.org/releases/latest/stubs/
 
@@ -385,6 +428,8 @@ await doSomething();
 assert.equal(setValuesFunction.calledWith([1, 2, 3]), true);
 ```
 
+Side note: for simple cases, you can just use plain JS by overwriting the function with proper assertion inside. Sinon may be usefull as an abstraction for complex cases that reduce the code bloatware.
+
 https://sinonjs.org/releases/latest/spies/
 
 <p align="right"><a href="#Table-of-Contents">back to top :arrow_up:</a></p>
@@ -401,6 +446,8 @@ await this.pauseTest();
 
 Whenever we will put it, we are able not just to see the intermediate state of the application inside the certain spec, but also we can just use a browser console to do some extra checks and experiments.
 
+If we wan't to run our code, we can just call `resumeTest()` in the console.
+
 <p align="right"><a href="#Table-of-Contents">back to top :arrow_up:</a></p>
 
 * * *
@@ -408,6 +455,8 @@ Whenever we will put it, we are able not just to see the intermediate state of t
 # Lookup & Register
 
 Let's imagine the scenario that we want to test the behaviour of our `users/` page that is accessible only for administrators. Our apps use `ember-simple-auth` for authentication as well as ember-can. We don't want to go through the whole login process in each acceptance test, because it slows down the test and increases the risk of breaking many tests when only the login page is broken.
+
+One of the good example of mocking behaviour of the service thanks to lookup is `authenticateSession` helper.
 
 
 ### What can we do about it?
@@ -463,7 +512,7 @@ module('when skiping', function() {
 * * *
 
 # Test helpers
-Quite often bigger packages allow their own set of helpers that are very useful in our tests.
+Quite often bigger packages allow their own set of helpers that are very useful in our tests. So, when you pick the add-on, it is a good practice to be at least aware that the add-on provides some of test helpers by reviewing its readme.
 
 ## Example:
 
@@ -483,7 +532,7 @@ This allows to easily set up the search phrase into ember power select input. Wh
 
 # Don’t overuse beforeEach/afterEach hooks
 
-Those hooks should be fulfilled with setup only for the most shared part of the given test file. If you need a set up that is very specific to only a single test in your test file, you should always put it into the specific test, rather than in the general setup, or else, it can lead to many problems and reduce the readability of the test. Also, it makes it harder to change tests, because you can break some of them when you modify those hooks.
+Those hooks should be fulfilled with setup only for the most shared part of the given test file. If you need a set up that is very specific to only a single test in your test file, you should always put it into the specific test, rather than in the general setup. Otherwise it can lead to many problems and reduce the readability of the test. Also, it makes it harder to change tests, because you can break some of them when you modify body of those hooks.
 
 <p align="right"><a href="#Table-of-Contents">back to top :arrow_up:</a></p>
 
@@ -517,9 +566,9 @@ First, we need to install the proper add-on:
 ember install ember-test-selectors
 ```
 
-What `ember-test-selectors` does, it allows us to add a proper data attribute within our templates which will work as an identifier in our tests. The cool thing about it is the fact, that we won't have to rely on id's or classes of our DOM elements that can change over time. Instead of that, we will use data attributes that will be enabled only in the testing environment (in the production build they are stripped) and even if we change the styling of our component it can still work without any extra changes in the test - which is the goal.
+What `ember-test-selectors` does, it allows us to add a proper data attribute within our templates which will work as an identifier in our tests. The cool thing about it is the fact, that we won't have to rely on id's or classes (simply DOM selectors) of our DOM elements that can change over time. Instead of that, we will use data attributes that will be enabled only in the testing environment (in the production build they are stripped) and even if we change the styling of our component it can still work without any extra changes in the test - which is the goal.
 
-In your templates you are now able to use `data-test-*` attributes, which are automatically removed from production builds:
+After adding the ember-test-selectors add-on you are able to use `data-test-*` attributes in your templates, which are automatically removed from production builds:
 
 ```handlebars
 <article>
@@ -528,7 +577,7 @@ In your templates you are now able to use `data-test-*` attributes, which are au
 </article>
 ```
 
-Once you've done that you can use attribute selectors to look up the elements:
+Once you've done that you can use attribute selectors to look up the elements (also in page-objects):
 
 ```javascript
 // in Acceptance Tests:
@@ -567,6 +616,8 @@ into this:
 ```javascript
 assert.dom('#title').hasText('My header');
 ```
+
+So it just simplifies the most common calls with very clear and descriptive interface.
 
 Full documentation can be found here: https://github.com/simplabs/qunit-dom
 
@@ -624,7 +675,7 @@ More info can be found in an add-on repo: https://github.com/typed-ember/ember-c
 
 # Time travelling
 
-From time to time, we need to ensure that our code will behave differently depending on the actual date context. With that said, for instance, our component presents date in the custom date format and we want to make sure it will work well in any given month - we need to let our test runner know that we are time traveling to the given date. How to do it? We can use a proper add-on that wraps **Timecop** library:
+From time to time, we need to ensure that our code will behave differently depending on the actual date/timezone context. With that said, for instance, our component presents date in the custom date format and we want to make sure it will work well in any given month - we need to let our test runner know that we are time traveling to the given date. How to do it? We can use a proper add-on that wraps **Timecop** library:
 
 ```
 ember install ember-cli-timecop
@@ -650,7 +701,7 @@ More details with examples: https://github.com/ember-intl/ember-intl/blob/fde23d
 
 # Accessibility / A11y
 
-Our apps should also support accessibility features so, for instance, our application supports screen readers well. Luckily, there are a ton of ready to use tools that we can use for that. Furthermore, there is a dedicated organization on Github that combines every well-documented a11y add-ons guidelines in one place: https://github.com/ember-a11y.
+Our apps should also support accessibility features, for instance, screen readers. Luckily, there are a ton of ready to use tools that we can use for that. Furthermore, there is a dedicated organization on Github that combines every well-documented a11y add-ons guidelines in one place: https://github.com/ember-a11y.
 
 Ok, but is there anything that we can do right now even without diving into all the documentation details and get some meaningful feedback about the current state of the accessibility in our application? Actually, yes.
 
@@ -680,7 +731,7 @@ As a good starting point, I recommend starting from the following article by **J
 
 # Engines
 
-When you deal with `ember-engines` and you would like to test your engine code for instance: components, you need to make sure that in test environment your dummy application has access to the certain engine component. To make sure it does, you need to replace the default resolver, to proper engine resolver from an addon:
+When you deal with `ember-engines` and you would like to test your engine code, for instance - components - you need to make sure that in test environment your dummy application has access to the certain engine component. To make sure it does, you need to replace the default resolver, to proper engine resolver from an addon:
 
 ```javascript
 import engineResolverFor from 'ember-engines/test-support/engine-resolver-for';
