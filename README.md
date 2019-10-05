@@ -1,6 +1,6 @@
 ## Table of Contents
 
- 1. [Why I should test?](#Why-I-should-test)
+ 1. [Why should I test?](#Why-should-I-test?)
  2. [Testing good practices](#Testing-good-practices)
  3. [Classification of tests](#Classification-of-tests)
  4. [How to run tests](#How-to-run-tests)
@@ -29,21 +29,22 @@
  27. [Animations](#Animations)
  28. [Visual testing](#Visual-testing)
 
-# Why I should test?
-In the beginning, it may sound like a waste of time for people who are not used to testing code, but in fact, it will pay off in the future when your code base grows. If your product will operate for months or even years, it means that you have to do manual testing of your app every time you introduce changes in the code. It is not a problem if you have dedicated resources for that purpose, but in the end, a lot of the work that is repeatable, instead of being automated, is handled over and over by someone introducing a possibility of making a mistake (we are just humans after all).
+# Why should I test?
+In the beginning, it may sound like a waste of time for people who are not used to testing code, but in fact, it will pay off in the future when your codebase grows. If your product operates for months or even years, it means that you have to do manual testing of your app every time you introduce changes to the code. It is not a problem if you have dedicated resources for that purpose, but in the end, a lot of the work that is repeatable, instead of being automated, is handled over and over by someone introducing a possibility of making a mistake (we are just humans after all).
 
-Now imagine that our team grows. A new team member who is not aware of every decision that other developers had made joins the team. He can break the already existing code base and there is a chance that someone can miss this breaking change and move it to the production code base if it is not well-tested. Of course, tests are not the answer for every possible error in our application, however, they can significantly reduce the changes that break the app over time. Also, they can bulletproof our business sensitive process - so we make sure that the happy paths that are critical for our app are untouched. Moreover, an important benefit is that we save time on manual testing because our continuous integration can provide feedback before anyone can look at the code change.
+Now imagine that our Team grows. A new member who is not aware of every decision that other developers had made joins the Team. He can break the existing code base. Then, there is a chance that someone can miss this breaking change and move it to the production codebase if it is not well-tested. Of course, tests are not the answer to every possible error in our application. However, they can significantly reduce the chances that the app gets broken over time. Also, they can bulletproof our business sensitive process - so we make sure that the happy paths that are critical for our app remain untouched. Moreover, an important benefit is that we save time on manual testing. Our continuous integration can provide feedback before anyone can look at the code change.
 
 <p align="right"><a href="#Table-of-Contents">back to top :arrow_up:</a></p>
 
 * * *
 
 # Testing good practices
-1. Write the test first, then implement the chunk of code that is tested. That will define the component acceptance criteria. In this step, we should focus on the interface of our component (for instance). Your code is like a puzzle, that could be easily replaced or totally rewritten under the hood - the only part that should stay consistent is the public interface and behaviour.
-2. Follow Single Responsibility Principle in your implementation (https://en.wikipedia.org/wiki/Single_responsibility_principle). One of the benefits: if we change the implementation of a small chunk of code, only the tests that are related to this code can break - and we can easily fix all the problems instead of looking at huge parts of a code that can interact with our changes. It also reduces the changes in the code base - which simplifies tracking those changes for your teammates as well as the merging process in general.
-3. Keep the setup as tiny and as explicit per each test as possible - avoid global before/after setup if it is not shared across all tests in the given file with tests. It also speeds up the process of writing tests, because you don’t have to worry about the “global” setup of your suite, instead of that you only focus on the “local” setup. It usually means that you also utilize your testing environment because you are not wasting resources when you don’t have to (for instance, global setup always sets a variable that is used in the scope of few tests instead of all tests).
-4. Make sure you have tested all cases without false-positive effect (broken implementation can’t pass the tests - with false-positive it can).
-5. Avoid using non-explicit dependencies, for instance - not publicly visible/defined dependencies of your code. Good example: our component shouldn’t rely on service objects that are globally injected in the application - they should be self-contained and independent, so we will avoid difficult debugging process and never forget about the proper setup of the application. Avoid coupling is the way to go, but sometimes you need to rely on other things - if you do so, try to be as transparent for other developers as possible.
+1. Write the test first, then implement the chunk of code that is tested. That will define the component acceptance criteria. In this step, we should focus on the interface of our component (for instance). Your code is like a puzzle, that could be easily replaced or rewritten under the hood. The only part that should stay consistent is the public interface and behaviour.
+2. Follow Single Responsibility Principle in your implementation (https://en.wikipedia.org/wiki/Single_responsibility_principle). Let's assume we change the implementation of a small chunk of code. Only the tests related to this code can break. We can easily fix all the problems instead of looking at huge parts of a code that can interact with our changes. It's the huge benefit of this principle. 
+It also reduces the changes in the codebase. This simplifies tracking those changes for your teammates as well as the merging process in general.
+3. Keep the setup as tiny and as explicit per each test as possible. Avoid global before/after setup if it is not shared across all tests in the given file with tests. It also speeds up the process of writing tests, because you don’t have to worry about the “global” setup of your suite. Instead of that you only focus on the “local” setup. It usually means that you also utilize your testing environment because you are not wasting resources when you don’t have to. For instance, global setup always sets a variable that is used in the scope of few tests instead of all tests.
+4. Make sure you have tested all cases without false-positive effect. Broken implementation can't pass the tests but it may still happen with false-positive effect.
+5. Avoid using non-explicit dependencies like not publicly visible/defined dependencies of your code. For example, our component shouldn’t rely on service objects that are globally injected in the application. They should be self-contained and independent. It allows us to avoid difficult debugging process and always remember about the proper setup of the application. Avoiding coupling is the way to go, but sometimes you need to rely on other things. If you do so, try to be as transparent for other developers as possible.
 
 <p align="right"><a href="#Table-of-Contents">back to top :arrow_up:</a></p>
 
@@ -51,12 +52,12 @@ Now imagine that our team grows. A new team member who is not aware of every dec
 
 # Classification of tests
 
-In general, in terms of frontend development tests can be split into the following categories:
+In general, in terms of frontend development, tests can be split into the following categories:
 
-- **Manual tests** - which relies on critical scenarios so-called acceptance criteria and are requires human effort to check the given solution works as expected.
-- **Acceptance tests** - automatic tests that check the whole application behaviour - similar to manual tests, however, they are usually more expensive at the beginning to introduce to the project.
-- **Integration tests** - lighter than acceptance tests - usually tests integration between multiple parts of the application, for instance, interaction with the component that has some extra dependency involved. In terms of integration test, we are focusing on the behaviour of the given component - without knowing how it is implemented underneath.
-- **Unit tests** - this type of automated tests are the fastest and are coupled with the implementation. With that said, if we are changing our implementation, for instance, our code has changed the inner or outer interface - the corresponding test should fail.
+- **Manual tests** - they rely on critical scenarios, so-called acceptance criteria. They require a human effort to check the given solution is working as expected.
+- **Acceptance tests** - automatic tests that check the whole application behaviour. They are similar to manual tests. They are, however, usually more expensive at the beginning when the project is introduced.
+- **Integration tests** - these are lighter than acceptance tests. They usually test integration between multiple parts of the application. For instance, interaction with the component that has some extra dependency involved. In terms of integration test, we are focusing on the behaviour of the given component without knowing how it is implemented underneath.
+- **Unit tests** - this type of automated tests are the fastest and are coupled with the implementation. With that said, if we are changing our implementation and our code has changed the inner or outer interface - the corresponding test should fail.
 
 It is worth noting that there are subcategories available within the groups above, for instance:
 
@@ -66,7 +67,7 @@ There is a pretty good classification chart that describes the relationship betw
 
 <p align="center"><img src="http://1.bp.blogspot.com/-RQLtpTssY_o/UZ9CYqzflqI/AAAAAAAAAyo/9kIx6aGwSaU/s320/TestingTrianglePished.png"></p>
 
-Find out more about testing clasification and Testing Pyramid: https://dzone.com/articles/testing-triangle-circle-and
+Find out more about testing classification and Testing Pyramid: https://dzone.com/articles/testing-triangle-circle-and
 
 <p align="right"><a href="#Table-of-Contents">back to top :arrow_up:</a></p>
 
@@ -83,20 +84,20 @@ $ ember test
 // run the suite in the terminal in watch mode - you can also inspect the app in that mode
 $ ember test -s
 
-// filter the test suite and running only the tests that matches the filter
+// filter the test suite and running only the tests that match the filter
 $ ember test -f 'some string'
 ```
 
-Also, by default, test runner is available in `/tests` tab of your app: http://localhost:4200/tests
+Also, by default, the test runner is available in `/tests` tab of your app: http://localhost:4200/tests
 
 <p align="right"><a href="#Table-of-Contents">back to top :arrow_up:</a></p>
 
 * * *
 
 # Fake backend
-Let's write a simple backend for our app so we can test it easily and we don't have to wait for the real backend to be up and running and we decouple our client app test suite from another application. The other upside of such approach is that we document how the backend should work like and we can send such definition to backend devs so they can align with us with already working code.
+Let's write a simple backend for our app so we can test it easily and we don't have to wait for the real backend to be up and running. We can also decouple our client app test suite from another application. The other upside of such an approach is that we document how the backend should work. We can send such definition to backend devs so they can align with us with already working code.
 
-When API devs implement complete solution based on our fake backend, everything should work the same, so our app can just us the API in the production without further adjustments.
+When API devs implement a complete solution based on our fake backend, everything should work the same. Our app can just use the API in the production without further adjustments.
 
 Let's add a proper add-on:
 
@@ -128,7 +129,7 @@ Make sure that your application adapter has the proper namespace property set:
 namespace: 'api'
 ```
 
-If we want to use Mirage in our test, we need to set it up in each test for instance in case of integration tests it can look like that:
+If we want to use Mirage in our test, we need to set it up in each test. For instance, in case of integration tests it can look like that:
 
 ```javascript
 import { module } from 'qunit';
@@ -141,7 +142,7 @@ module('Integration | Component | FindRecord', function(hooks) {
   ....
 ```
 
-Mirage itself contains another cool features, such as delaying responses, dynamic paths, customized responses, scenarios, factories and many more.
+Mirage itself contains a lot of cool features, such as delaying responses, dynamic paths, customized responses, scenarios, factories, and many more.
 
 More about mirage: https://www.ember-cli-mirage.com
 
@@ -150,7 +151,7 @@ More about mirage: https://www.ember-cli-mirage.com
 * * *
 
 # Unit tests
-This type of tests is highly bounded with our implementation, especially in terms of public contract of our classes/functions etc. With that said, by changing interface of our unit tested implementation, usually it should cause test fail.
+This type of tests is highly bounded with our implementation, especially in terms of the public contract of our classes/functions etc. With that said, by changing the interface of our unit tested implementation, it should usually cause a test fail.
 
 Let's generate a service test for our theme manager service:
 
@@ -199,7 +200,7 @@ module('Unit | Service | Theme switcher', function(hooks) {
 });
 ```
 
-By accessing public interface, we just checking that it's inner implementation interact with public property that can be used within the application.
+By accessing public interface, we are just checking if it's inner implementation interacts with a public property that can be used within the application.
 
 More info: https://guides.emberjs.com/release/testing/unit-testing-basics/
 
@@ -208,7 +209,7 @@ More info: https://guides.emberjs.com/release/testing/unit-testing-basics/
 * * *
 
 # Integration tests
-We can imagine integration test as something between unit and acceptance tests. In the one side, we need to follow the interface (of component in the given case), on the other hand, we focus on behaviour of the component after rendering or even better interacting with it.
+We can imagine an integration test as something between unit and acceptance tests. On the one hand, we need to follow the interface (of a component in the given case). On the other hand, we focus on the behaviour of the component after rendering or, even better, interacting with it.
 
 Let's generate a component test for our **user-details** component:
 
@@ -216,7 +217,7 @@ Let's generate a component test for our **user-details** component:
 $ ember generate component-test user-details
 ```
 
-A sample component that prints info about our user & test for it can look as follows:
+A sample component that prints info about our user & test for it, can look as follows:
 
 ```handlebars
 <!-- app/components/user-details/template.hbs -->
@@ -256,9 +257,9 @@ More info: https://guides.emberjs.com/release/testing/testing-components/
 * * *
 
 # Acceptance tests
-This type of test shouldn't know anything implementation details of our application. Typical acceptance test should focus flow testing - happy paths testing or in smaller scope for instance checking multiple components integrated together on specific a page.
+This type of test shouldn't know any implementation details of our application. Typical acceptance test should focus on flow testing. It includes happy paths testing or in the smaller scope, checking multiple components integrated together on specific a page.
 
-Typical scenario that most apps needs to handle one way or another - creation of a new user. After user creation, app redirects to the listing on `/users` route.
+A typical scenario that most apps needs to handle one way or another is the creation of a new user. After user creation, app redirects to the listing on `/users` route.
 
 We can use a blueprint to create a new acceptance test:
 
@@ -287,9 +288,9 @@ module('Acceptance | users', function(hooks) {
 });
 ```
 
-What you can notice in the following example, there is a lot of implementation details involved, such as specific querySelectors (`input.name` & `button.submit`) - we will abstract such implementation details in the next section with **page-objects**, so our test can be even more descriptive.
+You can notice in the following example, that there is a lot of implementation details involved, such as specific querySelectors (`input.name` & `button.submit`). We will abstract such implementation details in the next section with **page-objects**, so our test can be even more descriptive.
 
-More info about `test-helpers` you can find in [API reference](https://github.com/emberjs/ember-test-helpers/blob/master/API.md)
+More info about `test-helpers` you can find in [API Reference](https://github.com/emberjs/ember-test-helpers/blob/master/API.md)
 
 More info: https://guides.emberjs.com/release/testing/acceptance/
 
@@ -369,13 +370,13 @@ More info: http://ember-cli-page-object.js.org
 * * *
 
 # Stubs
-We can stub methods that are heavy, require complex setup and usually are not the clue of our tests. With stubs, we also improving their readability.
+We can stub methods that are heavy, require complex setup and usually are not the clue of our tests. With stubs, we also improve their readability.
 
-Let's imagine the scenario, that we have a service, that has a complex method `usersTeams` that is used by our component. It's not only complex, but it has multiple dependencies, so the setup would be quite complex and would bloat our test suite, but its not the clue of our component test and should be covered separatelly in the proper unit test of the service. 
+Let's assume that we have a service which has a complex method `usersTeams` used by our component. It's not only complex, but it has multiple dependencies. In this case, the setup would be quite complicated and would bloat our test suite. It is not the clue of our component test though. It should be covered separately in the proper unit test of the service. 
 
-We assume that it works fine, because it is unit tested, so let's stub it (mimic it's behaviour by overriding it with simple result behaviour).
+We assume that it works fine because it is unit tested, so let's stub it (mimic its behaviour by overriding it with simple result behaviour).
 
-One of the options that we have is use just power of JavaScript or use dedicated libs that can provide handy interface for stubs, such as for example **Sinon**.
+One of the options is to use only the power of JavaScript. The other is to use dedicated libs that can provide a handy interface for stubs, such as  **Sinon**.
 
 ```javascript
 import sinon from 'sinon';
@@ -384,7 +385,7 @@ const store = this.owner.lookup('service:store');
 sinon.stub(store, 'usersTeams').returns(store.peekAll('user'));
 ```
 
-Now we are sure that once our component, calls store service in it's code and hits the **usersTeams** method, without further due it will return user records (if any are provided for example via Mirage). 
+We can now be sure what happens when our component calls store service in its code and hits the **usersTeams** method. It will return our records with no further delay (if any are provided for example via Mirage). 
 
 https://sinonjs.org/releases/latest/stubs/
 
@@ -393,9 +394,11 @@ https://sinonjs.org/releases/latest/stubs/
 * * *
 
 # Mocks
-Quite often in tests, we need only simple objects rather than instances of full implementation of the given class. A good example: models where we are using mirage objects instead of Ember Data models, that differ with their inner implementation (which speeds up tests).
+Quite often in tests, we need only simple objects rather than instances of full implementation of the given class. 
+A good example are models where we are using Mirage objects instead of Ember Data models. They differ from their inner implementation and it speeds up tests. 
 
-If we have a mirage in our application, we have a globally available server that can help us create new models for us.
+
+If we have a mirage in our application, we have a globally available server that can help us create new models.
 
 ```javascript
 const user = {
@@ -428,7 +431,7 @@ await doSomething();
 assert.equal(setValuesFunction.calledWith([1, 2, 3]), true);
 ```
 
-Side note: for simple cases, you can just use plain JS by overwriting the function with proper assertion inside. Sinon may be usefull as an abstraction for complex cases that reduce the code bloatware.
+Side note: for simple cases, you can just use plain JS by overwriting the function with a proper assertion inside. Sinon may be useful as an abstraction for complex cases that reduce the code bloatware.
 
 https://sinonjs.org/releases/latest/spies/
 
@@ -438,15 +441,15 @@ https://sinonjs.org/releases/latest/spies/
 
 # Debugging
 
-QUnit brings us a utility method that helps us examine and stop the execution of our spec:
+QUnit brings a utility method that helps us examine and stop the execution of our spec:
 
 ```javascript
 await this.pauseTest();
 ```
 
-Whenever we will put it, we are able not just to see the intermediate state of the application inside the certain spec, but also we can just use a browser console to do some extra checks and experiments.
+Every time we put it, we are able to see not only the intermediate state of the application inside the certain test. We can also use a browser console to do some extra checks and experiments. 
 
-If we wan't to run our code, we can just call `resumeTest()` in the console.
+If we want to run our code, we can just call `resumeTest()` in the console.
 
 <p align="right"><a href="#Table-of-Contents">back to top :arrow_up:</a></p>
 
@@ -454,21 +457,21 @@ If we wan't to run our code, we can just call `resumeTest()` in the console.
 
 # Lookup & Register
 
-Let's imagine the scenario that we want to test the behaviour of our `users/` page that is accessible only for administrators. Our apps use `ember-simple-auth` for authentication as well as ember-can. We don't want to go through the whole login process in each acceptance test, because it slows down the test and increases the risk of breaking many tests when only the login page is broken.
+Let's imagine a scenario where we want to test the behaviour of our `users/` page which is accessible only for administrators. Our apps use `ember-simple-auth` for authentication as well as ember-can. We don't want to go through the whole login process in each acceptance test. It slows down the test and increases the risk of breaking many tests when only the login page is broken.
 
-One of the good example of mocking behaviour of the service thanks to lookup is `authenticateSession` helper.
+One of the good examples of mocking behaviour of the service thanks to lookup is `authenticateSession` helper.
 
 
 ### What can we do about it?
 
-Usually, our logic relies on the state of service objects. We need to make sure that we will stub a proper method or override a proper variable of the specific service object. How can we achieve that? We can use lookups. A lookup can find a reference of the specific factory for us so in a test, we can do something like this:
+Usually, our logic relies on the state of service objects. We need to make sure that we stub a proper method or override a proper variable of the specific service object. How can we achieve that? We can use lookups. A lookup can find a reference to the specific factory for us so in a test, we can do something like this:
 
 ```javascript
 this.owner.lookup('service:store') // returns store
 this.owner.lookup('component:my-component') // returns specific component
 ```
 
-Ok, what if we don't have the service in place in our application but it is still needed. We can register our own service easily. We can do the same for other types such as components, controllers, helpers etc. How? By using `.register` method:
+What if we don't have the service in place in our application but it is still needed? We can register our own service easily. We can do the same for other types such as components, controllers, helpers etc. How? By using `.register` method:
 
 ```javascript
 this.owner.register('service:my-service', EmberObject.create({})
@@ -512,7 +515,7 @@ module('when skiping', function() {
 * * *
 
 # Test helpers
-Quite often bigger packages allow their own set of helpers that are very useful in our tests. So, when you pick the add-on, it is a good practice to be at least aware that the add-on provides some of test helpers by reviewing its readme.
+Quite often bigger packages allow their own set of helpers that are very useful in our tests. So, when you pick the add-on, it is a good practice to be at least aware that the add-on provides some of the test helpers by reviewing its readme.
 
 ## Example:
 
@@ -524,7 +527,7 @@ import {
 await typeInSearch('Test phrase');
 ```
 
-This allows to easily set up the search phrase into ember power select input. When you see that an add-on misses a test helper that could be useful, don't hesitate to contribute to it and add it on your own!
+This allows to easily set up the search phrase into ember power select input. When you see that an add-on misses a test helper that could be useful, don't hesitate to contribute to it and add it yourself!
 
 <p align="right"><a href="#Table-of-Contents">back to top :arrow_up:</a></p>
 
@@ -532,14 +535,14 @@ This allows to easily set up the search phrase into ember power select input. Wh
 
 # Don’t overuse beforeEach/afterEach hooks
 
-Those hooks should be fulfilled with setup only for the most shared part of the given test file. If you need a set up that is very specific to only a single test in your test file, you should always put it into the specific test, rather than in the general setup. Otherwise it can lead to many problems and reduce the readability of the test. Also, it makes it harder to change tests, because you can break some of them when you modify body of those hooks.
+Those hooks should be fulfilled with setup only for the most shared part of the given test file. If you need a  setup that is very specific to only a single test in your test file, you should always put it into the specific test, rather than in the general setup. Otherwise, it can lead to many problems and reduce the readability of the test. Also, it makes it harder to change tests, because you can break some of them when you modify the body of those hooks.
 
 <p align="right"><a href="#Table-of-Contents">back to top :arrow_up:</a></p>
 
 * * *
 
 # Blueprints
-You can save your time with blueprints. The blueprints available are listed here:
+You can save your time with blueprints. The available blueprints are listed here:
 
 https://github.com/emberjs/ember.js/tree/master/blueprints
 
@@ -566,7 +569,7 @@ First, we need to install the proper add-on:
 ember install ember-test-selectors
 ```
 
-What `ember-test-selectors` does, it allows us to add a proper data attribute within our templates which will work as an identifier in our tests. The cool thing about it is the fact, that we won't have to rely on id's or classes (simply DOM selectors) of our DOM elements that can change over time. Instead of that, we will use data attributes that will be enabled only in the testing environment (in the production build they are stripped) and even if we change the styling of our component it can still work without any extra changes in the test - which is the goal.
+What `ember-test-selectors` does, is allowing us to add a proper data attribute within our templates. It  will work as an identifier in our tests. The cool thing about it is the fact, that we won't have to rely on id's or classes (simply DOM selectors) of our DOM elements which  can change over time. Instead of that, we will use data attributes that will be enabled only in the testing environment (in the production build they are stripped). Even if we change the styling of our component it can still work without any extra changes in the test - and it is our goal.
 
 After adding the ember-test-selectors add-on you are able to use `data-test-*` attributes in your templates, which are automatically removed from production builds:
 
@@ -577,7 +580,7 @@ After adding the ember-test-selectors add-on you are able to use `data-test-*` a
 </article>
 ```
 
-Once you've done that you can use attribute selectors to look up the elements (also in page-objects):
+Once you've done that, you can use attribute selectors to look up the elements (also in page-objects):
 
 ```javascript
 // in Acceptance Tests:
@@ -617,11 +620,11 @@ into this:
 assert.dom('#title').hasText('My header');
 ```
 
-So it just simplifies the most common calls with very clear and descriptive interface.
+So it just simplifies the most common calls with a very clear and descriptive interface.
 
 Full documentation can be found here: https://github.com/simplabs/qunit-dom
 
-The especially useful part for us: https://github.com/simplabs/qunit-dom/blob/master/API.md
+The most useful part for us: https://github.com/simplabs/qunit-dom/blob/master/API.md
 
 <p align="right"><a href="#Table-of-Contents">back to top :arrow_up:</a></p>
 
@@ -629,7 +632,7 @@ The especially useful part for us: https://github.com/simplabs/qunit-dom/blob/ma
 
 # Check the flow
 
-Sometimes you need to verify the sequence of calls in your code. There is a very handy tool available that could handle this check for you and its called **steps**.
+Sometimes you need to verify the sequence of calls in your code. There is a very handy tool available that could handle this check for you and it's called **steps**.
 
 Let's take a look at the example:
 
@@ -665,7 +668,7 @@ It may not be connected with testing at a first glance, but using a type system 
 
 In the Ember ecosystem, we have an add-on that adds easy support for **TypeScript**. We can write our code in **.ts** and then it will be automatically compiled into a compatible js code with a type check.
 
-It may be very useful for unit-level tests, where part of the issues may be only connected to an incorrect type of the variable passed to the interface. Thanks to strong typing, you will get feedback from your code before the runtime.
+It can be very useful for unit-level tests, where part of the issues may only be  connected to an incorrect type of the variable passed to the interface. Thanks to strong typing, you will get feedback from your code before the runtime.
 
 More info can be found in an add-on repo: https://github.com/typed-ember/ember-cli-typescript
 
@@ -675,7 +678,7 @@ More info can be found in an add-on repo: https://github.com/typed-ember/ember-c
 
 # Time travelling
 
-From time to time, we need to ensure that our code will behave differently depending on the actual date/timezone context. With that said, for instance, our component presents date in the custom date format and we want to make sure it will work well in any given month - we need to let our test runner know that we are time traveling to the given date. How to do it? We can use a proper add-on that wraps **Timecop** library:
+From time to time, we need to ensure that our code behaves differently depending on the actual date/timezone context.Let’s assume our component presents date in the custom date format and we want to make sure it will work well in any given month. We need to let our test runner know that we are time travelling to the given date. How to do it? We can use a proper add-on that wraps **Timecop** library:
 
 ```
 ember install ember-cli-timecop
@@ -683,7 +686,7 @@ ember install ember-cli-timecop
 
 More info on how to use it can be found here: https://github.com/jamesarosen/Timecop.js
 
-You may also consider alternative: https://github.com/Ticketfly/ember-mockdate-shim
+You may also consider an alternative: https://github.com/Ticketfly/ember-mockdate-shim
 
 <p align="right"><a href="#Table-of-Contents">back to top :arrow_up:</a></p>
 
@@ -691,7 +694,7 @@ You may also consider alternative: https://github.com/Ticketfly/ember-mockdate-s
 
 # Enforce locale
 
-A similar case to the one above, may happen in terms of the locale of our app - to enforce the proper locale we can use **setupIntl** or **setLocale** from **Intl** add-on.
+A similar case to the one above may happen in terms of the locale of our app - to enforce the proper locale we can use **setupIntl** or **setLocale** from **Intl** add-on.
 
 More details with examples: https://github.com/ember-intl/ember-intl/blob/fde23d17ec7b3d7d8df602778a6c0c79c060e1fd/docs/testing.md
 
@@ -701,9 +704,9 @@ More details with examples: https://github.com/ember-intl/ember-intl/blob/fde23d
 
 # Accessibility / A11y
 
-Our apps should also support accessibility features, for instance, screen readers. Luckily, there are a ton of ready to use tools that we can use for that. Furthermore, there is a dedicated organization on Github that combines every well-documented a11y add-ons guidelines in one place: https://github.com/ember-a11y.
+Our apps should also support accessibility features, for instance, screen readers. Luckily, there are tones of ready-to-use tools that we can use. Furthermore, there is a dedicated organization on Github which combines every well-documented a11y add-ons guideline in one place: https://github.com/ember-a11y.
 
-Ok, but is there anything that we can do right now even without diving into all the documentation details and get some meaningful feedback about the current state of the accessibility in our application? Actually, yes.
+Ok, but is there anything that we can do right now to get some meaningful feedback about the current state of the accessibility in our application (without diving into all the documentation details)? Actually, yes.
 
 Let's install a proper add-on:
 
@@ -723,7 +726,7 @@ test('accessibility check of the our app root', async function (assert) {
 });
 ```
 
-As a good starting point, I recommend starting from the following article by **Jen Weber**: https://www.emberjs.com/blog/2018/06/17/ember-accessibility-and-a11y-tools.html
+As a good starting point, I recommend beginning with the following article by **Jen Weber**: https://www.emberjs.com/blog/2018/06/17/ember-accessibility-and-a11y-tools.html
 
 <p align="right"><a href="#Table-of-Contents">back to top :arrow_up:</a></p>
 
@@ -731,13 +734,13 @@ As a good starting point, I recommend starting from the following article by **J
 
 # Engines
 
-When you deal with `ember-engines` and you would like to test your engine code, for instance - components - you need to make sure that in test environment your dummy application has access to the certain engine component. To make sure it does, you need to replace the default resolver, to proper engine resolver from an addon:
+When you deal with `ember-engines` and you would like to test your engine code, (e.g. components)  you need to make sure that in test environment your dummy application has access to the certain engine component. To make sure it does, you need to replace the default resolver with a proper engine resolver from an addon:
 
 ```javascript
 import engineResolverFor from 'ember-engines/test-support/engine-resolver-for';
 ```
 
-To use it, you pass it as a param to your **setup** call, for instance in case of unit tests you replace default:
+To use it, you pass it as a param to your **setup** call. For instance, in case of unit tests you replace default:
 
 ```javascript
 setupTest(hooks);
@@ -757,7 +760,7 @@ setupTest(hooks, {
 
 # Animations
 
-When we need to make sure that our app finished all the animations we need to use the proper test helper. Don't worry, `ember-test-helpers` covers this case. To do so, just use
+When we need to make sure that our app finished all the animations, we should use the proper test helper. Don't worry, `ember-test-helpers` covers this case. To do so, just use
 
 ```javascript
 await settled()
@@ -771,7 +774,7 @@ We can even get more information about the state of our app when animations are 
 
 # Visual testing
 
-Guess what - Ember got you covered again and thanks to Percy with the [proper add-on](https://github.com/percy/ember-percy), visual regression testing is extremely easy to integrate with our acceptance tests. All you need to do to create and compare snapshot in terms of your acceptance test is to add within the specific test the following code:
+Guess what - Ember got you covered again and thanks to Percy with the [proper add-on](https://github.com/percy/ember-percy), visual regression testing is extremely easy to integrate with our acceptance tests. All you need to do in order to create and compare snapshot in terms of your acceptance test, is to add the following code within the specific test:
 
 ```javascript
 percySnapshot('homepage');
