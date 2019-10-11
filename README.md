@@ -16,10 +16,10 @@
  14. [Debugging](#Debugging)
  15. [Make sure that all assertions passed](#Make-sure-that-all-assertions-passed)
  16. [Test helpers](#Test-helpers)
- 17. [Don’t overuse beforeEach/afterEach hooks](#Don’t-overuse-beforeEach/afterEach-hooks)
+ 17. [Keep the test setup slim](#Keep-the-test-setup-slim)
  18. [Blueprints](#Blueprints)
- 19. [Simplify tests without implementation lock-in](#Simplify-tests-without-implementation-lock-in)
- 20. [High-Level DOM Assertions for QUnit](#High-Level-DOM-Assertions-for-QUnit)
+ 19. [Avoid implementation lock-in](#Avoid-implementation-lock-in)
+ 20. [High-Level DOM Assertions](#High-Level-DOM-Assertions)
  21. [Check the flow](#Check-the-flow)
  22. [Type your code](#Type-your-code)
  23. [Time travelling](#Time-travelling)
@@ -275,11 +275,7 @@ export default class CommentsComponent extends Component {
 
 ```handlebars
 <!-- app/components/comments-provider/template.hbs -->
-<div class="comments">
-  {{#each this.comments as |comment|}}
-    {{yield comment}}
-  {{/each}}
-</div>
+{{yield comments}}
 ```
 
 And presentation component, that will take care of presenting comment well:
@@ -307,8 +303,10 @@ module('Integration | Component | comments-provider', function(hooks) {
     assert.expect(3);
 
     await render(hbs`
-      <CommentsProvider as |comment|>
-        <CommentPresenter comment={{comment}} />
+      <CommentsProvider as |comments|>
+        {{#each comments as |comment|}}
+          <CommentPresenter comment={{comment}} />
+        {{/each}}
       </CommentsProvider>
     `);
 
@@ -326,7 +324,7 @@ More info: https://guides.emberjs.com/release/testing/testing-components/
 * * *
 
 # Acceptance tests
-This type of test shouldn't know any implementation details of our application. Typical acceptance test should focus on flow testing. It includes happy paths testing or in the smaller scope, checking multiple components integrated together on specific a page.
+This type of test shouldn't know any implementation details of our application. Typical acceptance test should focus on user flow testing. It includes happy paths testing or in the smaller scope, checking multiple components integrated together on specific a page.
 
 ![image](https://user-images.githubusercontent.com/1891508/66642949-42be2b80-ec0d-11e9-8a5d-4078e36400f6.png)
 
@@ -608,7 +606,7 @@ This allows to easily set up the search phrase into ember power select input. Wh
 
 * * *
 
-# Don’t overuse beforeEach/afterEach hooks
+# Keep the test setup slim
 
 Those hooks should be fulfilled with setup only for the most shared part of the given test file. If you need a  setup that is very specific to only a single test in your test file, you should always put it into the specific test, rather than in the general setup. Otherwise, it can lead to many problems and reduce the readability of the test. Also, it makes it harder to change tests, because you can break some of them when you modify the body of those hooks.
 
@@ -636,7 +634,7 @@ $ ember generate helper-test helper-name
 
 * * *
 
-# Simplify tests without implementation lock-in
+# Avoid implementation lock-in
 
 First, we need to install the proper add-on:
 
@@ -673,7 +671,7 @@ More info on how to use it can be found here: https://github.com/simplabs/ember-
 
 * * *
 
-# High-Level DOM Assertions for QUnit
+# High-Level DOM Assertions
 
 To clean up your tests, you should use `qunit-dom` add-on:
 
