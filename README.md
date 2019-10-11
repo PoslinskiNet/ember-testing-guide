@@ -16,10 +16,10 @@
  14. [Debugging](#Debugging)
  15. [Make sure that all assertions passed](#Make-sure-that-all-assertions-passed)
  16. [Test helpers](#Test-helpers)
- 17. [Don’t overuse beforeEach/afterEach hooks](#Don’t-overuse-beforeEach/afterEach-hooks)
+ 17. [Keep the test setup slim](#Keep-the-test-setup-slim)
  18. [Blueprints](#Blueprints)
- 19. [Simplify tests without implementation lock-in](#Simplify-tests-without-implementation-lock-in)
- 20. [High-Level DOM Assertions for QUnit](#High-Level-DOM-Assertions-for-QUnit)
+ 19. [Avoid implementation lock-in](#Avoid-implementation-lock-in)
+ 20. [High-Level DOM Assertions](#High-Level-DOM-Assertions)
  21. [Check the flow](#Check-the-flow)
  22. [Type your code](#Type-your-code)
  23. [Time travelling](#Time-travelling)
@@ -153,6 +153,10 @@ More about mirage: https://www.ember-cli-mirage.com
 # Unit tests
 This type of tests is highly bounded with our implementation, especially in terms of the public contract of our classes/functions etc. With that said, by changing the interface of our unit tested implementation, it should usually cause a test fail.
 
+We only focus on the atomic part of the application, for instance, single component/service/helper etc. and how it changes its state (or not if it shoudln't).
+
+![image](https://user-images.githubusercontent.com/1891508/66642929-389c2d00-ec0d-11e9-82b5-e9e80d13b229.png)
+
 Let's generate a service test for our theme manager service:
 
 ```
@@ -209,7 +213,7 @@ More info: https://guides.emberjs.com/release/testing/unit-testing-basics/
 * * *
 
 # Integration tests
-We can imagine an integration test as something between unit and acceptance tests. On the one hand, we need to follow the interface (of a component in the given case). On the other hand, we focus on the behaviour of the component after rendering or, even better, interacting with it.
+We can imagine an integration test (aka components tests) as something between unit and acceptance tests. On the one hand, we need to follow the interface (of a component in the given case). On the other hand, we focus on the behaviour of the component **after rendering** or, even better, interacting with it.
 
 Let's generate a component test for our **user-details** component:
 
@@ -250,6 +254,69 @@ module('Integration | Component | user details', function(hooks) {
 });
 ```
 
+Another example could be a data provider component mixed with presentation component.
+
+![image](https://user-images.githubusercontent.com/1891508/66642940-3fc33b00-ec0d-11e9-9fb9-6b731be500d1.png)
+
+Let's create 2 components:
+
+CommentsProvider that will be responsible for comments data:
+
+```javascript
+// app/components/comments-provider/component.js
+import Component from '@ember/component';
+
+export default class CommentsComponent extends Component {
+  get comments() {
+    return ['It was great', 'Epic!', 'Congratulations m8'];
+  }
+}
+```
+
+```handlebars
+<!-- app/components/comments-provider/template.hbs -->
+{{yield comments}}
+```
+
+And presentation component, that will take care of presenting comment well:
+
+```handlebars
+<!-- app/components/comment-presenter/template.hbs -->
+<div class="comments__line">
+  {{@comment}}
+</div>
+```
+
+Test that can check if everything is working as expected, could look as follows:
+
+```javascript
+// tests/integration/component/comments-provider-test.js
+import { module, test } from 'qunit';
+import { setupRenderingTest } from 'ember-qunit';
+import { render } from '@ember/test-helpers';
+import hbs from 'htmlbars-inline-precompile';
+
+module('Integration | Component | comments-provider', function(hooks) {
+  setupRenderingTest(hooks);
+
+  test('it renders', async function(assert) {
+    assert.expect(3);
+
+    await render(hbs`
+      <CommentsProvider as |comments|>
+        {{#each comments as |comment|}}
+          <CommentPresenter comment={{comment}} />
+        {{/each}}
+      </CommentsProvider>
+    `);
+
+    assert.dom(this.element).includesText('It was great');
+    assert.dom(this.element).includesText('Epic!');
+    assert.dom(this.element).includesText('Congratulations m8');
+  });
+});
+```
+
 More info: https://guides.emberjs.com/release/testing/testing-components/
 
 <p align="right"><a href="#Table-of-Contents">back to top :arrow_up:</a></p>
@@ -257,7 +324,9 @@ More info: https://guides.emberjs.com/release/testing/testing-components/
 * * *
 
 # Acceptance tests
-This type of test shouldn't know any implementation details of our application. Typical acceptance test should focus on flow testing. It includes happy paths testing or in the smaller scope, checking multiple components integrated together on specific a page.
+This type of test shouldn't know any implementation details of our application. Typical acceptance test should focus on user flow testing. It includes happy paths testing or in the smaller scope, checking multiple components integrated together on specific a page.
+
+![image](https://user-images.githubusercontent.com/1891508/66642949-42be2b80-ec0d-11e9-8a5d-4078e36400f6.png)
 
 A typical scenario that most apps needs to handle one way or another is the creation of a new user. After user creation, app redirects to the listing on `/users` route.
 
@@ -375,6 +444,10 @@ We can stub methods that are heavy, require complex setup and usually are not th
 Let's assume that we have a service which has a complex method `usersTeams` used by our component. It's not only complex, but it has multiple dependencies. In this case, the setup would be quite complicated and would bloat our test suite. It is not the clue of our component test though. It should be covered separately in the proper unit test of the service. 
 
 We assume that it works fine because it is unit tested, so let's stub it (mimic its behaviour by overriding it with simple result behaviour).
+
+This is what we want to achieve:
+
+![image](https://user-images.githubusercontent.com/1891508/66645081-0b9e4900-ec12-11e9-8e5c-292fee277cb6.png)
 
 One of the options is to use only the power of JavaScript. The other is to use dedicated libs that can provide a handy interface for stubs, such as  **Sinon**.
 
@@ -533,7 +606,7 @@ This allows to easily set up the search phrase into ember power select input. Wh
 
 * * *
 
-# Don’t overuse beforeEach/afterEach hooks
+# Keep the test setup slim
 
 Those hooks should be fulfilled with setup only for the most shared part of the given test file. If you need a  setup that is very specific to only a single test in your test file, you should always put it into the specific test, rather than in the general setup. Otherwise, it can lead to many problems and reduce the readability of the test. Also, it makes it harder to change tests, because you can break some of them when you modify the body of those hooks.
 
@@ -561,7 +634,7 @@ $ ember generate helper-test helper-name
 
 * * *
 
-# Simplify tests without implementation lock-in
+# Avoid implementation lock-in
 
 First, we need to install the proper add-on:
 
@@ -598,7 +671,7 @@ More info on how to use it can be found here: https://github.com/simplabs/ember-
 
 * * *
 
-# High-Level DOM Assertions for QUnit
+# High-Level DOM Assertions
 
 To clean up your tests, you should use `qunit-dom` add-on:
 
@@ -631,6 +704,8 @@ The most useful part for us: https://github.com/simplabs/qunit-dom/blob/master/A
 * * *
 
 # Check the flow
+
+![image](https://user-images.githubusercontent.com/1891508/66645361-c595b500-ec12-11e9-8654-ff7f35793d02.png)
 
 Sometimes you need to verify the sequence of calls in your code. There is a very handy tool available that could handle this check for you and it's called **steps**.
 
@@ -780,9 +855,13 @@ Guess what - Ember got you covered again and thanks to Percy with the [proper ad
 percySnapshot('homepage');
 ```
 
-Of course, it also requires some additional setup related to the Percy service itself. To find out more, check out the [Percy page](https://docs.percy.io/docs/ember).
+Tool prepares side-by-side comparison report if anything is different than desired snapshot:
 
-Also, you can check out the alternative **ember-backstop** described in [the article](https://www.linkedin.com/pulse/ember-backstop-visual-regression-testing-tutorial-garris-shipon/).
+![image](https://user-images.githubusercontent.com/1891508/66645444-f70e8080-ec12-11e9-87c4-d65b50a48295.png)
+
+It also requires some additional setup related to the Percy service itself. To find out more, check out the [Percy page](https://docs.percy.io/docs/ember).
+
+You can check out the alternative **ember-backstop** described in [the article](https://www.linkedin.com/pulse/ember-backstop-visual-regression-testing-tutorial-garris-shipon/).
 
 <p align="right"><a href="#Table-of-Contents">back to top :arrow_up:</a></p>
 
