@@ -447,7 +447,7 @@ We assume that it works fine because it is unit tested, so let's stub it (mimic 
 
 This is what we want to achieve:
 
-![image](https://user-images.githubusercontent.com/1891508/66645081-0b9e4900-ec12-11e9-8e5c-292fee277cb6.png)
+![image](https://user-images.githubusercontent.com/1891508/66696936-1e6f5700-ecc0-11e9-9ee7-c5819d507cc9.png)
 
 One of the options is to use only the power of JavaScript. The other is to use dedicated libs that can provide a handy interface for stubs, such as  **Sinon**.
 
