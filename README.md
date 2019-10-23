@@ -1,3 +1,11 @@
+# Introduction
+
+There are so many areas to discover on the subject of testing in Ember's world. This guide covers topics such as: when to use different types of tests and the addons that can help you overcome common challenges. The guide presents the most common use-cases, challenges and answers that every developer may have when dealing with tests. It includes code examples that show you how to use proper strategies. 
+
+This guide has been designed to be a great starting point for every team wanting to begin their testing journey. Along the way, you will learn the best practices that improve your work and the efficiency of your team. It is also a great common source for all looking for standardization of testing practices. 
+
+* * *
+
 ## Table of Contents
 
 ### Fundamentals
