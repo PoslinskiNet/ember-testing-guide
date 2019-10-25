@@ -4,6 +4,8 @@ There are so many areas to discover on the subject of testing in Ember's world. 
 
 This guide has been designed to be a great starting point for every team wanting to begin their testing journey. Along the way, you will learn the best practices that improve your work and the efficiency of your team. It is also a great common source for all looking for standardization of testing practices. 
 
+OK, it's time to get your hands dirty with some tests!
+
 * * *
 
 ## Table of Contents
