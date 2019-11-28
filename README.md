@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/1891508/69803327-cf2fa800-11d3-11ea-9b23-2e09ffff1e9f.png" alt="Ember Pell Logo" width="100%">
+</p>
+
 # Introduction
 
 There are so many areas to discover on the subject of testing in Ember's world. This guide covers topics such as: when to use different types of tests and the addons that can help you overcome common challenges. The guide presents the most common use-cases, challenges and answers that every developer may have when dealing with tests. It includes code examples that show you how to use proper strategies. 
