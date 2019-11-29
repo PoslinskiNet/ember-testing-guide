@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/1891508/69803327-cf2fa800-11d3-11ea-9b23-2e09ffff1e9f.png" alt="Ember Pell Logo" width="100%">
+  <img src="https://user-images.githubusercontent.com/1891508/69876731-3c1c6e00-12b8-11ea-8769-5660bcea5f52.png" alt="Ember Testing Guide" width="100%">
 </p>
 
 # Introduction
