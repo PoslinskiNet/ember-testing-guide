@@ -659,9 +659,9 @@ Sometimes you need to verify the sequence of function calls in your code. There 
 Let's take a look at an example:
 
 ```javascript
-const displayResults = () => assert.step(['displayResults']);
-const validateForm = () => assert.step(['validateForm']);
-const prepareData = () => assert.step(['prepareData']);
+const displayResults = () => assert.step('displayResults');
+const validateForm = () => assert.step('validateForm');
+const prepareData = () => assert.step('prepareData');
 
 const submitForm = () => {
   prepareData();
