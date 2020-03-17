@@ -537,7 +537,7 @@ Sometimes, in such scenarios, we can use spy instead (for simpler objects).
 Example:
 
 ```javascript
-module('when skiping', function() {
+module('when skipping', function() {
   test('fires the on-skip action', async function(assert) {
     assert.expect(1);
 
